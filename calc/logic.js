@@ -1,45 +1,50 @@
 //EACH MOVE IS AN OBJECT WITH TEXT AND A VALUE
   
 var knife = {
-  text: "its knife",
-  strength: 12,
+  text: " attacked with a knife!",
+  strength: 6,
   mpCost: 0
 }
 var wings = {
-  text: "its wings",
+  text: " attacked with wings!",
   strength: 3,
   mpCost: 0
 }
 var peck = {
-  text: "its wings",
-  strength: 6,
+  text: " attacked with a beak!",
+  strength: 3,
   mpCost: 0
+}
+var evileye = {
+  text: " cast a glaring eye beam!",
+  strength: 2,
+  mpCost: 3
 }
 
 var rocks = {
-  text: "rocks",
+  text: " slung rocks!",
   strength: 9,
   mpCost: 0
 }
 var punch = {
-  text: "a punch",
+  text: " throws a punch!",
   strength: 12,
   mpCost: 0
 }
 var fireball = {
-  text: "a magic fireball",
+  text: " cast a magic fireball!",
   strength: 2,
-  mpCost: 1
+  mpCost: 3
 }
 var snowball = {
-  text: "a magic snowball",
+  text: " cast a magic snowball!",
   strength: 2,
-  mpCost: 1
+  mpCost: 3
 }
 var shockbolt = {
-  text: "a shocking bolt of lightning",
-  strength: 4,
-  mpCost: 3
+  text: " cast a shocking bolt of lightning!",
+  strength: 3,
+  mpCost: 5
 }
 
   // HEROES BELOW
@@ -50,7 +55,7 @@ var shockbolt = {
       ATK:3,
       DEF:6,
       NAME: "Caeley",
-      MOVES: ["fireball", "snowball", "shock bolt"]
+      MOVES: [fireball, snowball, shockbolt]
       }
     var marcus = {
       LEVEL:30,
@@ -59,7 +64,7 @@ var shockbolt = {
       ATK:7,
       DEF:4,
       NAME: "Marcus",
-      MOVES: ["fists", "rocks"]
+      MOVES: [punch, rocks, shockbolt]
       }
     var jason = {
       LEVEL:30,
@@ -86,7 +91,7 @@ var shockbolt = {
       DEF:5,
       LEVEL:30,
       NAME: "Vengeance",
-      MOVES: [knife, wings, peck]
+      MOVES: [knife, wings, peck, evileye, fireball]
       }
       var amphi = {
       HP:20,
@@ -177,26 +182,46 @@ var shockbolt = {
     var damage;
     var roll;
     var crit;
+
+    //ENEMY FIGHT
     function aiFight(){
       var aiChoice = Math.floor(Math.random() * enemy.MOVES.length);
       //var power = enemy.MOVES[aiChoice].strength;
       //console.log(power);
       var attacking = enemy.MOVES[aiChoice];
-      console.log(attacking.strength);
       //console.log(enemy.NAME + " attacked with " + enemy.MOVES[aiChoice] + "!");
-      console.log(enemy.NAME + " attacked with " + attacking.text + "!");
+      
       roll =  Math.floor(Math.random() * 15);
       crit = 1;
-      if (roll == 0){crit = 2;console.log("WOW!");}
-      else{crit = 1;}
+      
       //console.log (roll);
-      damage = (Math.floor(((7 * enemy.ATK)-((userSTAT.DEF)/2)) * ((100-roll)/100)))*crit;
+      if (attacking.mpCost == 0){
+        console.log(enemy.NAME + attacking.text);
+        if (roll == 0){crit = 2;console.log("WOW!");}
+        else{crit = 1;}
+      damage = (Math.floor(((attacking.strength * enemy.ATK)-((userSTAT.DEF)/2)) * ((100-roll)/100)))*crit;
+      
+      }
+      else if (enemySTAT.MP >= attacking.mpCost) {
+        console.log(enemy.NAME + attacking.text);
+        damage = (enemy.LEVEL * attacking.strength);
+        enemySTAT.MP -= attacking.mpCost;
+        console.log(enemySTAT.MP);
+      }
+      else {
+        console.log(enemy.NAME + " tried to cast " + attacking.text + "!");
+        console.log(enemy.NAME + "it failed...");
+      }
       userSTAT.HP -= damage;
+
       console.log(user.NAME + " took " + damage + " damage!")
     }
+
+    //GOOD GUY FIGHT
     function userFight(){
       var choice = 1;
-      console.log(user.NAME + " attacked with " + user.MOVES[choice] + "!");
+      var chosen = user.MOVES[choice];
+      console.log(user.NAME + chosen.text);
       roll =  Math.floor(Math.random() * 15);
       crit = 1;
       if (roll == 0){crit = 2;console.log("CRITICAL HIT!");}
