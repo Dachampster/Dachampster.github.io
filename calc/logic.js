@@ -88,7 +88,7 @@ var shockbolt = {
       HP:12,
       MP:5,
       ATK:10,
-      DEF:5,
+      DEF:2,
       LEVEL:30,
       NAME: "Vengeance",
       MOVES: [knife, wings, peck, evileye, fireball]
@@ -200,19 +200,20 @@ var shockbolt = {
         if (roll == 0){crit = 2;console.log("WOW!");}
         else{crit = 1;}
       damage = (Math.floor(((attacking.strength * enemy.ATK)-((userSTAT.DEF)/2)) * ((100-roll)/100)))*crit;
-      
+      userSTAT.HP -= damage;
       }
       else if (enemySTAT.MP >= attacking.mpCost) {
         console.log(enemy.NAME + attacking.text);
         damage = (enemy.LEVEL * attacking.strength);
         enemySTAT.MP -= attacking.mpCost;
         console.log(enemySTAT.MP);
+        userSTAT.HP -= damage;
       }
       else {
         console.log(enemy.NAME + " tried to cast " + attacking.text + "!");
-        console.log(enemy.NAME + "it failed...");
+        console.log("it failed...");
       }
-      userSTAT.HP -= damage;
+      
 
       console.log(user.NAME + " took " + damage + " damage!")
     }
